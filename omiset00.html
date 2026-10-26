@@ -57,24 +57,78 @@
           <h2>Q. すでに家・土地はお持ちですか？</h2>
         </div>
 
-        <div class="grid grid-cols-1 max-w-xl mx-auto gap-4">
-          <!-- Choice 1: Reform (Only option active) -->
-          <button onclick="selectPlan('reform')" class="group p-5 rounded-xl border-2 border-emerald-500 bg-emerald-50/30 hover:border-emerald-600 hover:bg-emerald-50 transition-all text-left flex flex-col justify-between shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Choice 1: Reform (Active) -->
+          <button onclick="selectPlan('reform')" class="group p-5 rounded-xl border-2 border-emerald-500 bg-emerald-50/20 hover:border-emerald-600 hover:bg-emerald-50/50 transition-all text-left flex flex-col justify-between shadow-sm cursor-pointer">
             <div>
               <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-bold bg-emerald-600 text-white px-2 py-0.5 rounded transition">入力フォーム ①</span>
-                <span class="text-xl">🏠</span>
+                <span class="text-lg">🏠</span>
               </div>
-              <h3 class="font-bold text-slate-900 text-base mb-1">家・土地共に所有（リフォームプラン）</h3>
-              <p class="text-xs text-slate-600 leading-relaxed">
-                現在お住まいの自宅や所有物件をリフォームして店舗を併設・開業したい方向けのお申込みフォームです（対応部門：リフォーム部門）。
+              <h3 class="font-bold text-slate-900 text-base mb-1">家・土地共に所有</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                現在お住まいの自宅や所有物件をリフォームして店舗を併設・開業したい方
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-emerald-200/60 flex items-center justify-between text-xs font-bold text-emerald-700">
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-700">
               <span>リフォームプランに進む</span>
               <span>➔</span>
             </div>
           </button>
+
+          <!-- Choice 2: Used + Reform (Disabled / No link) -->
+          <div class="p-5 rounded-xl border-2 border-slate-200 bg-slate-50/80 text-left flex flex-col justify-between opacity-60 cursor-not-allowed">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold bg-slate-200 text-slate-500 px-2 py-0.5 rounded">入力フォーム ②</span>
+                <span class="text-lg grayscale">🏢</span>
+              </div>
+              <h3 class="font-bold text-slate-600 text-base mb-1">家・土地共に未所有</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                これから中古物件を探してリフォームし、店舗付き住宅を計画したい方
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-400">
+              <span>中古リフォームプラン（準備中）</span>
+              <span>—</span>
+            </div>
+          </div>
+
+          <!-- Choice 3: Custom A (Disabled / No link) -->
+          <div class="p-5 rounded-xl border-2 border-slate-200 bg-slate-50/80 text-left flex flex-col justify-between opacity-60 cursor-not-allowed">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold bg-slate-200 text-slate-500 px-2 py-0.5 rounded">入力フォーム ③（当社限定地）</span>
+                <span class="text-lg grayscale">🏗️</span>
+              </div>
+              <h3 class="font-bold text-slate-600 text-base mb-1">当社取り扱い住宅地をご希望</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                当社分譲地・土地＋注文住宅での店舗併設建築をご検討の方
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-400">
+              <span>注文プランA（準備中）</span>
+              <span>—</span>
+            </div>
+          </div>
+
+          <!-- Choice 4: Custom B (Disabled / No link) -->
+          <div class="p-5 rounded-xl border-2 border-slate-200 bg-slate-50/80 text-left flex flex-col justify-between opacity-60 cursor-not-allowed">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold bg-slate-200 text-slate-500 px-2 py-0.5 rounded">入力フォーム ④</span>
+                <span class="text-lg grayscale">📐</span>
+              </div>
+              <h3 class="font-bold text-slate-600 text-base mb-1">土地のみ所有（または購入予定あり）</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                すでにお持ちの土地や取得予定の土地に注文住宅として店舗併設で新築したい方
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-400">
+              <span>注文プランB（準備中）</span>
+              <span>—</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
