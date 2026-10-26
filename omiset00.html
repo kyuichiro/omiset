@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>店舗付き住宅サービス『おみせっとハウス』WEB診断＆オンライン申込</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Smooth fade-in for modal */
+    @keyframes fadeZoomIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .animate-fade-zoom-in {
+      animation: fadeZoomIn 0.2s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">🏪</span>
+        <span class="font-bold text-lg tracking-wide">おみせっとハウス（仮）</span>
+      </div>
+      <span class="text-xs bg-emerald-700 text-emerald-100 px-2.5 py-1 rounded-full border border-emerald-600">
+        WEB診断・オンライン申込
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- ============================================================ -->
+    <!-- STEP 0: INITIAL DIAGNOSIS                                    -->
+    <!-- ============================================================ -->
+    <div id="screen-diagnosis" class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 text-center">
+        <span class="inline-block bg-emerald-100 text-emerald-800 font-semibold text-xs px-3 py-1 rounded-full mb-3">
+          簡単WEB診断START
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+          ご希望の開業スタイルを診断します
+        </h1>
+        <p class="text-sm text-slate-600 max-w-xl mx-auto">
+          質問にお答えいただくだけで、最適なプランと担当専門部門へスムーズにご案内いたします。
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center space-x-2 text-emerald-700 font-bold mb-6 text-lg border-b pb-3">
+          <span>❓</span>
+          <h2>Q. すでに家・土地はお持ちですか？</h2>
+        </div>
+
+        <div class="grid grid-cols-1 max-w-xl mx-auto gap-4">
+          <!-- Choice 1: Reform (Only option active) -->
+          <button onclick="selectPlan('reform')" class="group p-5 rounded-xl border-2 border-emerald-500 bg-emerald-50/30 hover:border-emerald-600 hover:bg-emerald-50 transition-all text-left flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold bg-emerald-600 text-white px-2 py-0.5 rounded transition">入力フォーム ①</span>
+                <span class="text-xl">🏠</span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-base mb-1">家・土地共に所有（リフォームプラン）</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                現在お住まいの自宅や所有物件をリフォームして店舗を併設・開業したい方向けのお申込みフォームです（対応部門：リフォーム部門）。
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-emerald-200/60 flex items-center justify-between text-xs font-bold text-emerald-700">
+              <span>リフォームプランに進む</span>
+              <span>➔</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STEP 1: FORM DISPLAY                                         -->
+    <!-- ============================================================ -->
+    <div id="screen-form" class="space-y-6 hidden">
+      <!-- Top Navigation -->
+      <div class="flex items-center justify-between">
+        <button onclick="showScreen('diagnosis')" class="inline-flex items-center text-xs font-semibold text-slate-600 hover:text-emerald-700 transition">
+          ⬅ 診断画面へ戻る
+        </button>
+        <div class="flex items-center space-x-2">
+          <button type="button" onclick="fillDummyData()" class="inline-flex items-center px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-full shadow-sm transition">
+            ⚡ ダミーデータ入力
+          </button>
+          <div class="text-xs bg-slate-200 text-slate-700 font-medium px-3 py-1 rounded-full">
+            担当対応部署: <span id="display-department" class="font-bold text-emerald-800">リフォーム部門</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Title Banner -->
+      <div class="bg-emerald-900 text-white rounded-2xl p-6 shadow-sm">
+        <span class="text-xs text-emerald-300 font-semibold tracking-wider">【最新2026/10/20システムフロー対応】</span>
+        <h2 id="display-plan-title" class="text-xl sm:text-2xl font-bold mt-1">選択プラン名</h2>
+      </div>
+
+      <!-- ========== Area Check Section ========== -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-900 text-base border-b pb-2 flex items-center">
+          <span class="bg-emerald-600 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-2">1</span>
+          対象エリア・物件所在地のご確認
+        </h3>
+
+        <!-- Area Check: custom_a 専用UI -->
+        <div id="area-check-custom-a" class="space-y-3 hidden">
+          <p class="text-xs text-slate-600">
+            本プランの対象は当社が取り扱う以下の住宅地限定となります。
+          </p>
+          <div class="flex gap-2 text-xs font-semibold">
+            <span class="bg-emerald-50 text-emerald-800 border border-emerald-300 px-3 py-1 rounded">奈良県内当社分譲地</span>
+            <span class="bg-emerald-50 text-emerald-800 border border-emerald-300 px-3 py-1 rounded">大阪府内当社分譲地</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">都道府県</label>
+              <select id="select-prefecture-a" class="w-full text-xs p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500">
+                <option value="奈良県">奈良県</option>
+                <option value="大阪府">大阪府</option>
+                <option value="和歌山県">和歌山県</option>
+                <option value="京都府">京都府</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="checkArea()" class="w-full sm:w-auto px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-lg transition">
+            エリア適応判定を実行
+          </button>
+        </div>
+
+        <!-- Area Check: 通常UI (reform / used_reform / custom_b) -->
+        <div id="area-check-default" class="space-y-3 hidden">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">都道府県</label>
+              <select id="select-prefecture" class="w-full text-xs p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500">
+                <option value="奈良県">奈良県（対象エリア）</option>
+                <option value="和歌山県">和歌山県（対象エリア）</option>
+                <option value="東京都">東京都（エリア外）</option>
+                <option value="大阪府">大阪府（エリア外）</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">市区町村</label>
+              <input type="text" id="input-city" placeholder="例：奈良市三条本町" class="w-full text-xs p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+          <button onclick="checkArea()" class="w-full sm:w-auto px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-lg transition">
+            エリア判定をする
+          </button>
+        </div>
+
+        <!-- Area Result: OK -->
+        <div id="area-result-ok" class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center text-xs text-emerald-800 font-semibold hidden">
+          ✅ 対象エリアです。このまま下部フォームを入力してください。
+        </div>
+
+        <!-- Area Result: NG (custom_a 用 — 他プランへの誘導あり) -->
+        <div id="area-result-ng-redirect" class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs text-amber-900 hidden">
+          <div class="flex items-center font-bold text-amber-800">⚠️ 他エリアをご希望の方へ</div>
+          <p>
+            ご希望のエリアは「注文プランA（当社取り扱い住宅地限定）」の対象外となります。
+            その他のエリアでご検討される場合は「中古リフォームプラン」の問い合わせフォームよりご相談ください。
+          </p>
+          <button onclick="selectPlan('used_reform')" class="inline-flex items-center text-xs font-bold text-emerald-700 hover:underline pt-1">
+            中古リフォームプラン（フォーム②）へ移動する ➔
+          </button>
+        </div>
+
+        <!-- Area Result: NG (通常 — エリア外) -->
+        <div id="area-result-ng-general" class="p-4 bg-rose-50 border border-rose-200 rounded-xl space-y-2 text-xs text-rose-900 hidden">
+          <div class="flex items-center font-bold text-rose-800">⚠️ 本プランの対象エリア外です</div>
+          <p>
+            申し訳ございません。ご指定の市区町村は現在『おみせっとハウス』の直接サービス対応エリア外となっております。
+          </p>
+          <!-- used_reform 専用: 仲介HP誘導 -->
+          <div id="area-ng-brokerage-link" class="pt-2 hidden">
+            <p class="font-semibold mb-1">本エリアで不動産仲介のみをご希望の場合：</p>
+            <a href="#" onclick="event.preventDefault(); alert('仲介公式HPへ移動します')" class="inline-flex items-center px-3 py-1.5 bg-rose-600 text-white font-bold text-xs rounded hover:bg-rose-700 transition">
+              仲介公式HPへ ➔
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== Main Form Content (hidden until area OK) ========== -->
+      <div id="main-form-content" class="space-y-6 hidden">
+
+        <!-- Privacy Agreement -->
+        <div class="bg-slate-100 p-4 rounded-xl text-xs space-y-2 border border-slate-200">
+          <p class="font-bold text-slate-700">プライバシーポリシーのご確認</p>
+          <p class="text-slate-600 leading-relaxed">
+            入力いただいた個人情報は、お問合せへの回答および適切な担当部署からのご案内のために利用いたします。
+          </p>
+          <label class="flex items-center space-x-2 pt-1 font-bold text-slate-800 cursor-pointer">
+            <input type="checkbox" id="check-privacy" onchange="togglePrivacy()" class="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4">
+            <span>プライバシーポリシーに同意してフォームに入力する</span>
+          </label>
+        </div>
+
+        <!-- Form Fields (shown after privacy agreement) -->
+        <div id="form-fields" class="space-y-6 hidden">
+
+          <!-- ===== Section: ご本人様情報 ===== -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+            <h3 class="font-bold text-slate-900 text-base border-b pb-2 flex items-center">
+              <span class="bg-emerald-600 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-2">2</span>
+              ご本人様情報
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">姓</label>
+                <input type="text" id="input-lastname" placeholder="山田" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">名</label>
+                <input type="text" id="input-firstname" placeholder="太郎" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">電話番号</label>
+                <input type="tel" id="input-phone" placeholder="090-0000-0000" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">メールアドレス</label>
+                <input type="email" id="input-email" placeholder="sample@example.com" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Section: 既存物件概要 (Form ① reform 専用) ===== -->
+          <div id="section-property-info" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4 hidden">
+            <h3 class="font-bold text-slate-900 text-base border-b pb-2 flex items-center">
+              <span class="bg-emerald-600 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-2">3</span>
+              既存物件概要
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">構造</label>
+                <select id="select-structure" class="w-full text-xs p-2.5 border rounded-lg">
+                  <option value="">選択してください</option>
+                  <option value="wooden">木造</option>
+                  <option value="steel">鉄骨造</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">階数</label>
+                <select id="select-floors" class="w-full text-xs p-2.5 border rounded-lg">
+                  <option value="">選択してください</option>
+                  <option value="1">平屋</option>
+                  <option value="2">2階建て</option>
+                  <option value="3">3階建て</option>
+                  <option value="4">4階建て</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">築年数 (竣工年)</label>
+                <input type="text" id="input-completion-year" placeholder="例：2010年" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">間取り図面の有無</label>
+                <label class="border border-dashed rounded-lg p-3 text-center bg-slate-50 hover:bg-slate-100 transition cursor-pointer block">
+                  <span class="text-xl block mb-1">📤</span>
+                  <span class="text-xs text-slate-600 font-semibold">写真・PDF等の図面アップロード</span>
+                  <input type="file" id="input-drawing-file" accept=".jpg,.jpeg,.png,.pdf" class="hidden">
+                </label>
+                <p id="drawing-file-name" class="text-xs text-emerald-700 font-semibold mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">ローンの残債</label>
+                <div class="flex gap-4 pt-2">
+                  <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
+                    <input type="radio" name="loanRemaining" value="yes">
+                    <span>残債あり</span>
+                  </label>
+                  <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
+                    <input type="radio" name="loanRemaining" value="no">
+                    <span>残債なし</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Section: 土地概要 (Form ④ custom_b 専用) ===== -->
+          <div id="section-land-info" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4 hidden">
+            <h3 class="font-bold text-slate-900 text-base border-b pb-2 flex items-center">
+              <span class="bg-emerald-600 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-2">3</span>
+              土地概要
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">土地の状態</label>
+                <select id="select-land-status" class="w-full text-xs p-2.5 border rounded-lg">
+                  <option value="">選択してください</option>
+                  <option value="owned">既に購入済・所有</option>
+                  <option value="planned">今後購入予定</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">土地面積 (㎡)</label>
+                <input type="text" id="input-land-area" placeholder="例：150" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Section: ローンご紹介簡易判定 (Form ②③④ 専用) ===== -->
+          <div id="loan-assessment-box" class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-200 space-y-3 hidden">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-xs font-bold text-emerald-800 bg-emerald-200/60 px-2.5 py-0.5 rounded">事前セルフチェック</span>
+                <h3 class="font-bold text-slate-900 text-sm mt-1">店舗併設住宅用 ローンご紹介簡易判定</h3>
+                <p class="text-xs text-slate-600 mt-1">
+                  店舗付き住宅向けの提携提言・住宅ローン利用条件を満たしているかその場で判定できます。
+                </p>
+              </div>
+              <span class="text-2xl">🧮</span>
+            </div>
+            <div class="pt-2 flex items-center justify-between border-t border-emerald-200/60">
+              <div class="text-xs">
+                判定状態: <span id="loan-status-text" class="text-slate-500">未判定</span>
+              </div>
+              <button onclick="openLoanModal()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-lg transition shadow-sm">
+                簡易判定を開始する
+              </button>
+            </div>
+          </div>
+
+          <!-- ===== Section: 希望店舗概要・ご予算 ===== -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+            <h3 class="font-bold text-slate-900 text-base border-b pb-2 flex items-center">
+              <span id="store-section-number" class="bg-emerald-600 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-2">4</span>
+              希望店舗概要・ご予算
+            </h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">想定業種（複数可）</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="美容室">
+                  <span>美容室</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="エステ・リラク">
+                  <span>エステ・リラク</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="ネイルサロン">
+                  <span>ネイルサロン</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="カフェ・物販">
+                  <span>カフェ・物販</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="教室・スクール">
+                  <span>教室・スクール</span>
+                </label>
+                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="その他">
+                  <span>その他</span>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">席数・規模・イメージ</label>
+              <textarea id="input-store-scale" rows="2" placeholder="例：施術席2席、シャンプー台1台、待合スペースあり。店舗部分約30㎡を希望。" class="w-full text-xs p-2.5 border rounded-lg"></textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">総予算 (円)</label>
+                <input type="text" id="input-total-budget" placeholder="例：3,500万" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">内 ローン希望 (円)</label>
+                <input type="text" id="input-loan-budget" placeholder="例：3,000万" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-700 mb-1">内 自己資金 (円)</label>
+                <input type="text" id="input-self-budget" placeholder="例：500万" class="w-full text-xs p-2.5 border rounded-lg">
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button & Dummy Fill -->
+          <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button type="button" onclick="fillDummyData()" class="w-full sm:w-auto px-6 py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl shadow transition">
+              ⚡ ダミーデータ自動入力
+            </button>
+            <button onclick="goToConfirm()" class="w-full sm:w-auto px-10 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-lg transition">
+              入力内容の確認画面へ進む
+            </button>
+          </div>
+
+        </div><!-- /form-fields -->
+      </div><!-- /main-form-content -->
+    </div><!-- /screen-form -->
+
+    <!-- ============================================================ -->
+    <!-- STEP 2: CONFIRMATION                                         -->
+    <!-- ============================================================ -->
+    <div id="screen-confirm" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6 hidden">
+      <h2 class="text-xl font-bold text-slate-900 border-b pb-3">入力内容のご確認</h2>
+
+      <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 space-y-1">
+        <span class="font-bold">送信先専門部門：</span>
+        <span id="confirm-department" class="font-extrabold text-sm text-emerald-800 ml-1">-</span>
+        <p class="text-slate-600 text-[11px] pt-1">※2026/10/20最新システムフロー図に基づき、上記部門へダイレクトにデータ連携されます。</p>
+      </div>
+
+      <dl class="divide-y divide-slate-100 text-xs">
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">選択プラン</dt>
+          <dd id="confirm-plan" class="col-span-2 font-bold text-slate-800">-</dd>
+        </div>
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">お名前</dt>
+          <dd id="confirm-name" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">ご連絡先</dt>
+          <dd id="confirm-contact" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">対象所在地</dt>
+          <dd id="confirm-location" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <!-- Form ① 専用 -->
+        <div id="confirm-row-property" class="py-2.5 grid grid-cols-3 hidden">
+          <dt class="font-semibold text-slate-500">既存物件概要</dt>
+          <dd id="confirm-property" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <!-- Form ④ 専用 -->
+        <div id="confirm-row-land" class="py-2.5 grid grid-cols-3 hidden">
+          <dt class="font-semibold text-slate-500">土地概要</dt>
+          <dd id="confirm-land" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">想定業種</dt>
+          <dd id="confirm-business" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">ご予算</dt>
+          <dd id="confirm-budget" class="col-span-2 text-slate-800">-</dd>
+        </div>
+        <div class="py-2.5 grid grid-cols-3">
+          <dt class="font-semibold text-slate-500">ローン紹介希望</dt>
+          <dd id="confirm-loan-requested" class="col-span-2 text-slate-800">-</dd>
+        </div>
+      </dl>
+
+      <div class="flex gap-3 pt-4">
+        <button onclick="showScreen('form')" class="w-1/2 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">修正する</button>
+        <button onclick="showScreen('complete')" class="w-1/2 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl transition shadow">この内容で送信する</button>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STEP 3: COMPLETE                                             -->
+    <!-- ============================================================ -->
+    <div id="screen-complete" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 text-center space-y-4 hidden">
+      <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+        <span class="text-3xl">🛡️</span>
+      </div>
+      <h2 class="text-2xl font-bold text-slate-900">お申込・診断送信が完了しました</h2>
+      <p class="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+        ご入力いただいた情報は、<span id="complete-department" class="font-bold text-emerald-800">-</span>へ正常に送信されました。
+        内容を確認のうえ、担当者より事前打ち合わせのご連絡をさせていただきます。
+      </p>
+      <div class="pt-6">
+        <button onclick="resetAll()" class="px-6 py-2.5 bg-slate-800 text-white font-bold text-xs rounded-lg hover:bg-slate-900 transition">
+          TOP診断画面へ戻る
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- LOAN ASSESSMENT MODAL                                        -->
+  <!-- ============================================================ -->
+  <div id="loan-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-fade-zoom-in">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-slate-900 text-sm flex items-center">
+          🧮 ローンご紹介簡易判定 モーダル
+        </h3>
+        <span id="modal-step-indicator" class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">Step 1 / 3</span>
+      </div>
+
+      <!-- Question 1 -->
+      <div id="modal-q1" class="space-y-3">
+        <p class="font-bold text-xs text-slate-800">Q1. 土地のローンはお持ち（または別途ご検討）ですか？</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="answerQ1('no')" class="p-3 border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 text-xs font-bold text-slate-700 transition">無（土地ローンなし）</button>
+          <button onclick="answerQ1('yes')" class="p-3 border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 text-xs font-bold text-slate-700 transition">有（単体土地ローン予定）</button>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div id="modal-q2" class="space-y-3 hidden">
+        <p class="font-bold text-xs text-slate-800">Q2. 主な返済の手段・原資はどちらですか？</p>
+        <div class="space-y-2 text-xs">
+          <button onclick="answerQ2('store_income')" class="w-full p-3 text-left border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 font-medium text-slate-700 transition">本人名義で開業後の店舗収入のみで返済</button>
+          <button onclick="answerQ2('other_self')" class="w-full p-3 text-left border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 font-medium text-slate-700 transition">本人名義で店舗以外の別収入（給与等）で返済</button>
+          <button onclick="answerQ2('salary')" class="w-full p-3 text-left border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 font-medium text-slate-700 transition">本人外名義（配偶者・家族等）の給与等収入で返済</button>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div id="modal-q3" class="space-y-3 hidden">
+        <p class="font-bold text-xs text-slate-800">Q3. ローン名義人様の年収は基準を満たしていますか？</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="answerQ3('above')" class="p-3 border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 text-xs font-bold text-slate-700 transition">基準額 以上（適合）</button>
+          <button onclick="answerQ3('below')" class="p-3 border rounded-xl hover:border-emerald-600 hover:bg-emerald-50 text-xs font-bold text-slate-700 transition">基準額 未満</button>
+        </div>
+      </div>
+
+      <!-- Modal Result Block -->
+      <div id="modal-result" class="space-y-4 text-center py-2 hidden">
+        <!-- OK -->
+        <div id="modal-result-ok" class="space-y-3 hidden">
+          <span class="text-4xl block">✅</span>
+          <h4 class="font-bold text-base text-slate-900">提携ローンご紹介 適合判定</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">判定条件を満たしております。フォームの「ローン紹介希望」に【有】をセットして進みます。</p>
+        </div>
+        <!-- NG -->
+        <div id="modal-result-ng" class="space-y-3 hidden">
+          <span class="text-4xl block">⚠️</span>
+          <h4 class="font-bold text-base text-slate-900">提携ローンのご紹介ができません</h4>
+          <p id="modal-ng-reason" class="text-xs text-slate-600 leading-relaxed"></p>
+          <p class="text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+            ※大変申し訳ございません。本システムからはローン紹介希望「無」に設定してお進みいただけます。
+          </p>
+        </div>
+        <button onclick="applyLoanResult()" class="w-full py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition">
+          判定結果を反映してフォームに戻る
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- JavaScript Interaction Logic                                 -->
+  <!-- ============================================================ -->
+  <script>
+    // --- Constants ---
+    const DEPARTMENTS = {
+      reform:      'リフォーム部門',
+      used_reform: '仲介部門',
+      custom_a:    '戸建部門・仲介部門',
+      custom_b:    '戸建部門'
+    };
+
+    const TITLES = {
+      reform:      'リフォームプラン（自宅をリフォームして開業）',
+      used_reform: '中古リフォームプラン（中古物件を探してリフォーム開業）',
+      custom_a:    '注文プランA（当社取り扱い住宅地限定・土地＋建物）',
+      custom_b:    '注文プランB（土地所有者様向け・建物建築）'
+    };
+
+    const STRUCTURE_LABELS = { wooden: '木造', steel: '鉄骨造' };
+    const FLOORS_LABELS    = { '1': '平屋', '2': '2階建て', '3': '3階建て', '4': '4階建て' };
+    const LAND_LABELS      = { owned: '既に購入済・所有', planned: '今後購入予定' };
+
+    // --- State ---
+    let currentPlan      = null;
+    let loanRequested    = 'unselected'; // 'yes' | 'no' | 'unselected'
+    let loanResultOk     = false;
+    let currentLoanStep  = 1;
+
+    // --- Screen Management ---
+    function showScreen(screenId) {
+      ['diagnosis', 'form', 'confirm', 'complete'].forEach(id => {
+        document.getElementById('screen-' + id).classList.add('hidden');
+      });
+      document.getElementById('screen-' + screenId).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (screenId === 'confirm') {
+        populateConfirmScreen();
+      }
+      if (screenId === 'complete') {
+        document.getElementById('complete-department').innerText = DEPARTMENTS[currentPlan];
+      }
+    }
+
+    // --- Plan Selection ---
+    function selectPlan(plan) {
+      currentPlan = plan;
+
+      // Update header
+      document.getElementById('display-department').innerText = DEPARTMENTS[plan];
+      document.getElementById('display-plan-title').innerText = TITLES[plan];
+
+      // Toggle area check UIs
+      const isCustomA = (plan === 'custom_a');
+      document.getElementById('area-check-custom-a').classList.toggle('hidden', !isCustomA);
+      document.getElementById('area-check-default').classList.toggle('hidden', isCustomA);
+
+      // Show/hide plan-specific form sections
+      document.getElementById('section-property-info').classList.toggle('hidden', plan !== 'reform');
+      document.getElementById('section-land-info').classList.toggle('hidden', plan !== 'custom_b');
+
+      // Loan assessment: hidden for reform, visible for others
+      document.getElementById('loan-assessment-box').classList.toggle('hidden', plan === 'reform');
+
+      // Update store section number (3 if reform has property section or custom_b has land section → store becomes 4, else 3 for ②③)
+      const storeNum = (plan === 'reform' || plan === 'custom_b') ? '4' : '3';
+      document.getElementById('store-section-number').innerText = storeNum;
+
+      // Reset area results & form visibility
+      hideAllAreaResults();
+      document.getElementById('main-form-content').classList.add('hidden');
+
+      // Reset privacy checkbox
+      document.getElementById('check-privacy').checked = false;
+      document.getElementById('form-fields').classList.add('hidden');
+
+      // Reset loan status
+      loanRequested = 'unselected';
+      const statusEl = document.getElementById('loan-status-text');
+      statusEl.innerText = '未判定';
+      statusEl.className = 'text-slate-500';
+
+      showScreen('form');
+    }
+
+    // --- Area Check ---
+    function hideAllAreaResults() {
+      ['area-result-ok', 'area-result-ng-redirect', 'area-result-ng-general', 'area-ng-brokerage-link'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+    }
+
+    function checkArea() {
+      hideAllAreaResults();
+
+      let pref;
+      if (currentPlan === 'custom_a') {
+        pref = document.getElementById('select-prefecture-a').value;
+      } else {
+        pref = document.getElementById('select-prefecture').value;
+      }
+
+      if (currentPlan === 'custom_a') {
+        // custom_a: 奈良県 or 大阪府 → OK
+        if (pref === '奈良県' || pref === '大阪府') {
+          document.getElementById('area-result-ok').classList.remove('hidden');
+          document.getElementById('main-form-content').classList.remove('hidden');
+        } else {
+          document.getElementById('area-result-ng-redirect').classList.remove('hidden');
+        }
+      } else {
+        // reform / used_reform / custom_b: 奈良県 or 和歌山県 → OK
+        if (pref === '奈良県' || pref === '和歌山県') {
+          document.getElementById('area-result-ok').classList.remove('hidden');
+          document.getElementById('main-form-content').classList.remove('hidden');
+        } else {
+          document.getElementById('area-result-ng-general').classList.remove('hidden');
+          // used_reform only: show brokerage link
+          if (currentPlan === 'used_reform') {
+            document.getElementById('area-ng-brokerage-link').classList.remove('hidden');
+          }
+        }
+      }
+    }
+
+    // --- Privacy Toggle ---
+    function togglePrivacy() {
+      const checked = document.getElementById('check-privacy').checked;
+      document.getElementById('form-fields').classList.toggle('hidden', !checked);
+    }
+
+    // --- File Upload Display ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const fileInput = document.getElementById('input-drawing-file');
+      if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+          const nameEl = document.getElementById('drawing-file-name');
+          if (e.target.files.length > 0) {
+            nameEl.innerText = '📎 ' + e.target.files[0].name;
+            nameEl.classList.remove('hidden');
+          } else {
+            nameEl.classList.add('hidden');
+          }
+        });
+      }
+    });
+
+    // --- Go to Confirm ---
+    function goToConfirm() {
+      showScreen('confirm');
+    }
+
+    function populateConfirmScreen() {
+      const lastname  = document.getElementById('input-lastname').value || '未入力';
+      const firstname = document.getElementById('input-firstname').value || '';
+      const phone     = document.getElementById('input-phone').value || '未入力';
+      const email     = document.getElementById('input-email').value || '未入力';
+
+      let pref, city;
+      if (currentPlan === 'custom_a') {
+        pref = document.getElementById('select-prefecture-a').value;
+        city = '';
+      } else {
+        pref = document.getElementById('select-prefecture').value;
+        city = document.getElementById('input-city').value || '';
+      }
+
+      // Basic fields
+      document.getElementById('confirm-plan').innerText       = TITLES[currentPlan];
+      document.getElementById('confirm-department').innerText = DEPARTMENTS[currentPlan];
+      document.getElementById('confirm-name').innerText       = `${lastname} ${firstname} 様`;
+      document.getElementById('confirm-contact').innerText    = `${phone} / ${email}`;
+      document.getElementById('confirm-location').innerText   = `${pref} ${city}`.trim();
+
+      // Form ① property info
+      const rowProp = document.getElementById('confirm-row-property');
+      if (currentPlan === 'reform') {
+        rowProp.classList.remove('hidden');
+        const structure = STRUCTURE_LABELS[document.getElementById('select-structure').value] || '未選択';
+        const floors    = FLOORS_LABELS[document.getElementById('select-floors').value] || '未選択';
+        const year      = document.getElementById('input-completion-year').value || '未入力';
+        const loanRem   = document.querySelector('input[name="loanRemaining"]:checked');
+        const loanText  = loanRem ? (loanRem.value === 'yes' ? '残債あり' : '残債なし') : '未選択';
+        document.getElementById('confirm-property').innerText = `${structure} / ${floors} / 竣工${year} / ${loanText}`;
+      } else {
+        rowProp.classList.add('hidden');
+      }
+
+      // Form ④ land info
+      const rowLand = document.getElementById('confirm-row-land');
+      if (currentPlan === 'custom_b') {
+        rowLand.classList.remove('hidden');
+        const landStatus = LAND_LABELS[document.getElementById('select-land-status').value] || '未選択';
+        const landArea   = document.getElementById('input-land-area').value || '未入力';
+        document.getElementById('confirm-land').innerText = `${landStatus} / ${landArea}㎡`;
+      } else {
+        rowLand.classList.add('hidden');
+      }
+
+      // Business types
+      const checkedTypes = [];
+      document.querySelectorAll('.cb-business:checked').forEach(cb => checkedTypes.push(cb.value));
+      document.getElementById('confirm-business').innerText = checkedTypes.length > 0 ? checkedTypes.join('・') : '未選択';
+
+      // Budget
+      const totalB = document.getElementById('input-total-budget').value || '-';
+      const loanB  = document.getElementById('input-loan-budget').value || '-';
+      const selfB  = document.getElementById('input-self-budget').value || '-';
+      document.getElementById('confirm-budget').innerText = `総予算 ${totalB} / ローン ${loanB} / 自己資金 ${selfB}`;
+
+      // Loan
+      if (currentPlan === 'reform') {
+        document.getElementById('confirm-loan-requested').innerText = '（リフォームプラン：対象外）';
+      } else {
+        document.getElementById('confirm-loan-requested').innerText =
+          loanRequested === 'yes' ? '希望する（判定結果：適合）' : '希望しない / 不可';
+      }
+    }
+
+    // --- Reset All ---
+    function resetAll() {
+      currentPlan   = null;
+      loanRequested = 'unselected';
+      // Clear inputs
+      document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"]').forEach(el => el.value = '');
+      document.querySelectorAll('textarea').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => el.checked = false);
+      document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+      document.getElementById('drawing-file-name').classList.add('hidden');
+      showScreen('diagnosis');
+    }
+
+    // ============================================================
+    // LOAN MODAL
+    // ============================================================
+    function openLoanModal() {
+      currentLoanStep = 1;
+      loanResultOk    = false;
+      updateStepIndicator();
+
+      // Show Q1, hide Q2/Q3/result
+      document.getElementById('modal-q1').classList.remove('hidden');
+      document.getElementById('modal-q2').classList.add('hidden');
+      document.getElementById('modal-q3').classList.add('hidden');
+      document.getElementById('modal-result').classList.add('hidden');
+      document.getElementById('modal-result-ok').classList.add('hidden');
+      document.getElementById('modal-result-ng').classList.add('hidden');
+
+      document.getElementById('loan-modal').classList.remove('hidden');
+    }
+
+    function closeLoanModal() {
+      document.getElementById('loan-modal').classList.add('hidden');
+    }
+
+    function updateStepIndicator() {
+      document.getElementById('modal-step-indicator').innerText = `Step ${currentLoanStep} / 3`;
+    }
+
+    // Q1: Land Loan
+    function answerQ1(answer) {
+      document.getElementById('modal-q1').classList.add('hidden');
+      if (answer === 'yes') {
+        showLoanNg('土地＋建物でまとめてローンをお申込みいただく必要がございます。');
+      } else {
+        currentLoanStep = 2;
+        updateStepIndicator();
+        document.getElementById('modal-q2').classList.remove('hidden');
+      }
+    }
+
+    // Q2: Repayment Method
+    function answerQ2(answer) {
+      document.getElementById('modal-q2').classList.add('hidden');
+      if (answer === 'store_income') {
+        showLoanNg('開業後の店舗収入のみを返済原資とする住宅ローン提携ご紹介は承れません。別収入またはご家族給与収入等が必要となります。');
+      } else {
+        currentLoanStep = 3;
+        updateStepIndicator();
+        document.getElementById('modal-q3').classList.remove('hidden');
+      }
+    }
+
+    // Q3: Income Level
+    function answerQ3(answer) {
+      document.getElementById('modal-q3').classList.add('hidden');
+      if (answer === 'below') {
+        showLoanNg('ローン名義人様の年収要件が基準に満たないため、提携ローンのご紹介ができかねます。');
+      } else {
+        showLoanOk();
+      }
+    }
+
+    function showLoanOk() {
+      loanResultOk = true;
+      document.getElementById('modal-result').classList.remove('hidden');
+      document.getElementById('modal-result-ok').classList.remove('hidden');
+      document.getElementById('modal-result-ng').classList.add('hidden');
+    }
+
+    function showLoanNg(reason) {
+      loanResultOk = false;
+      document.getElementById('modal-ng-reason').innerText = reason;
+      document.getElementById('modal-result').classList.remove('hidden');
+      document.getElementById('modal-result-ng').classList.remove('hidden');
+      document.getElementById('modal-result-ok').classList.add('hidden');
+    }
+
+    function applyLoanResult() {
+      closeLoanModal();
+      const statusEl = document.getElementById('loan-status-text');
+      if (loanResultOk) {
+        loanRequested       = 'yes';
+        statusEl.innerText  = '【紹介希望：有】（適合判定済み）';
+        statusEl.className  = 'font-bold text-emerald-700';
+      } else {
+        loanRequested       = 'no';
+        statusEl.innerText  = '【紹介希望：無】（条件不適合）';
+        statusEl.className  = 'font-bold text-rose-700';
+      }
+    }
+
+    // --- Dummy Data Fill ---
+    function fillDummyData() {
+      // プライバシーポリシー同意チェックをON & フォーム領域を表示
+      const privacyCb = document.getElementById('check-privacy');
+      if (privacyCb) {
+        privacyCb.checked = true;
+        togglePrivacy();
+      }
+
+      // エリア判定を自動OKに
+      const prefSelect = document.getElementById('select-prefecture');
+      if (prefSelect) prefSelect.value = '奈良県';
+      const cityInput = document.getElementById('input-city');
+      if (cityInput) cityInput.value = '奈良市登大路町';
+      checkArea();
+
+      // ご本人様情報
+      const lastName = document.getElementById('input-lastname');
+      if (lastName) lastName.value = '奈良';
+      const firstName = document.getElementById('input-firstname');
+      if (firstName) firstName.value = '太郎';
+      const phone = document.getElementById('input-phone');
+      if (phone) phone.value = '090-1234-5678';
+      const email = document.getElementById('input-email');
+      if (email) email.value = 'taro.nara@example.com';
+
+      // 既存物件概要（フォーム①）
+      const structure = document.getElementById('select-structure');
+      if (structure) structure.value = 'wooden';
+      const floors = document.getElementById('select-floors');
+      if (floors) floors.value = '2';
+      const year = document.getElementById('input-completion-year');
+      if (year) year.value = '2015年';
+      const loanRemainingNo = document.querySelector('input[name="loanRemaining"][value="no"]');
+      if (loanRemainingNo) loanRemainingNo.checked = true;
+
+      // 土地概要（フォーム④用があれば）
+      const landStatus = document.getElementById('select-land-status');
+      if (landStatus) landStatus.value = 'owned';
+      const landArea = document.getElementById('input-land-area');
+      if (landArea) landArea.value = '180';
+
+      // 希望業種
+      document.querySelectorAll('.cb-business').forEach(cb => {
+        if (cb.value === 'カフェ・物販' || cb.value === 'その他') {
+          cb.checked = true;
+        } else {
+          cb.checked = false;
+        }
+      });
+
+      // 規模・イメージ
+      const scale = document.getElementById('input-store-scale');
+      if (scale) scale.value = '1階部分を改装し、客席12席の自家焙煎カフェと物販コーナー（約35㎡）を併設希望。';
+
+      // ご予算
+      const totalB = document.getElementById('input-total-budget');
+      if (totalB) totalB.value = '1,800万円';
+      const loanB = document.getElementById('input-loan-budget');
+      if (loanB) loanB.value = '1,200万円';
+      const selfB = document.getElementById('input-self-budget');
+      if (selfB) selfB.value = '600万円';
+
+      // ローン簡易判定（フォーム②③④で表示されている場合用）
+      loanRequested = 'yes';
+      const loanStatus = document.getElementById('loan-status-text');
+      if (loanStatus) {
+        loanStatus.innerText = '【紹介希望：有】（適合判定済み）';
+        loanStatus.className = 'font-bold text-emerald-700';
+      }
+
+      // 通知
+      alert('ダミーデータを入力しました！そのまま確認画面へ進めます。');
+    }
+  </script>
+</body>
+</html>
