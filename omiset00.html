@@ -425,14 +425,6 @@
                   <span>ネイルサロン</span>
                 </label>
                 <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
-                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="カフェ・物販">
-                  <span>カフェ・物販</span>
-                </label>
-                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
-                  <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="教室・スクール">
-                  <span>教室・スクール</span>
-                </label>
-                <label class="flex items-center space-x-1.5 p-2 border rounded-lg bg-slate-50 cursor-pointer">
                   <input type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500 cb-business" value="その他">
                   <span>その他</span>
                 </label>
@@ -983,7 +975,7 @@
 
       // 希望業種
       document.querySelectorAll('.cb-business').forEach(cb => {
-        if (cb.value === 'カフェ・物販' || cb.value === 'その他') {
+        if (cb.value === '美容室' || cb.value === 'ネイルサロン') {
           cb.checked = true;
         } else {
           cb.checked = false;
@@ -992,7 +984,7 @@
 
       // 規模・イメージ
       const scale = document.getElementById('input-store-scale');
-      if (scale) scale.value = '1階部分を改装し、客席12席の自家焙煎カフェと物販コーナー（約35㎡）を併設希望。';
+      if (scale) scale.value = '1階部分を改装し、セット面2席・シャンプー台1台のプライベートサロン（約30㎡）を併設希望。';
 
       // ご予算
       const totalB = document.getElementById('input-total-budget');
